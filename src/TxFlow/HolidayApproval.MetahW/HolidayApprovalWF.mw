@@ -1,0 +1,57 @@
+﻿//Visit https://github.com/knat/Metah for more information
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Activities;
+using HolidayApproval.Entities;
+
+namespace HolidayApproval.MetahW
+{
+public sealed activity HolidayApprovalWF(HolidayRequestEntity HolidayRequest) {
+ bool staffManagerDecision;
+ staffManagerDecision = new CreateHolidayApprovalTaskActivity()
+	.Invoke(HolidayRequest, "StaffManager");
+ if(!staffManagerDecision)
+ {
+  new UpdateHolidayRequestStateActivity()
+	.Invoke(HolidayRequest, EHolidayRequestState.Refused);
+  new SendEmailActivity().Invoke("Holiday request", 
+	"Your holiday request has been refused!",HolidayRequest.Originator.EmailAddress);
+ }else
+ {
+  new UpdateHolidayRequestStateActivity()
+	.Invoke(HolidayRequest, EHolidayRequestState.Approved);
+  new SendEmailActivity().Invoke("Holiday request", 
+	"Your holiday request has been approved!"
+	,HolidayRequest.Originator.EmailAddress);
+  new BookHolidayRequestActivity().Invoke(HolidayRequest);
+  new UpdateHolidayRequestStateActivity()
+  .Invoke(HolidayRequest, EHolidayRequestState.Booked);
+ }
+}
+
+
+	class Program
+    {
+        static void Main()
+        {
+            WorkflowInvoker.Invoke(new HolidayApprovalWF());
+        }
+    }
+
+	public sealed activity CreateHolidayApprovalTaskActivity(HolidayRequestEntity HolidayRequest, string ResponsibleUser) as bool {
+        Result = false;
+    }
+
+	public sealed activity UpdateHolidayRequestStateActivity(HolidayRequestEntity HolidayRequest, EHolidayRequestState NewState) {
+    }
+
+
+	public sealed activity SendEmailActivity(string Subject, string Body, string ToMailAddress) {
+    }
+
+	public sealed activity BookHolidayRequestActivity(HolidayRequestEntity HolidayRequest) {
+    }
+}

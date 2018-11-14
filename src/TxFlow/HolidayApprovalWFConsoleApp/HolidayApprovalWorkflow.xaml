@@ -1,0 +1,306 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="HolidayApprovalWFConsoleApp.HolidayApprovalWorkflow"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:ha="clr-namespace:HolidayApproval.Activities;assembly=HolidayApproval.Activities"
+ xmlns:he="clr-namespace:HolidayApproval.Entities;assembly=HolidayApproval.Entities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="HolidayRequest" Type="InArgument(he:HolidayRequestEntity)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>HolidayApprovalWFConsoleApp.HolidayApprovalWorkflow_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>HolidayApprovalWFConsoleApp</x:String>
+      <x:String>HolidayApproval.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>HolidayApproval.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>HolidayApprovalWFConsoleApp</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart DisplayName="Holiday approval workflow" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="x:Boolean" Name="staffManagerDecision" />
+      <Variable x:TypeArguments="x:String" Name="now" />
+    </Flowchart.Variables>
+    <Flowchart.StartNode>
+      <FlowStep x:Name="__ReferenceID0" sap2010:WorkflowViewState.IdRef="FlowStep_1">
+        <ha:CreateHolidayApprovalTaskActivity sap2010:WorkflowViewState.IdRef="CreateHolidayApprovalTaskActivity_1" ResponsibleUser="StaffManager">
+          <ha:CreateHolidayApprovalTaskActivity.HolidayRequest>
+            <InArgument x:TypeArguments="he:HolidayRequestEntity">
+              <mca:CSharpValue x:TypeArguments="he:HolidayRequestEntity">HolidayRequest</mca:CSharpValue>
+            </InArgument>
+          </ha:CreateHolidayApprovalTaskActivity.HolidayRequest>
+          <ha:CreateHolidayApprovalTaskActivity.Result>
+            <OutArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpReference x:TypeArguments="x:Boolean">staffManagerDecision</mca:CSharpReference>
+            </OutArgument>
+          </ha:CreateHolidayApprovalTaskActivity.Result>
+        </ha:CreateHolidayApprovalTaskActivity>
+        <FlowStep.Next>
+          <FlowDecision x:Name="__ReferenceID1" DisplayName="Is approved?" sap2010:WorkflowViewState.IdRef="FlowDecision_1">
+            <FlowDecision.Condition>
+              <mca:CSharpValue x:TypeArguments="x:Boolean">!staffManagerDecision</mca:CSharpValue>
+            </FlowDecision.Condition>
+            <FlowDecision.True>
+              <FlowStep x:Name="__ReferenceID3" sap2010:WorkflowViewState.IdRef="FlowStep_2">
+                <ha:UpdateHolidayRequestStateActivity sap2010:WorkflowViewState.IdRef="UpdateHolidayRequestStateActivity_1">
+                  <ha:UpdateHolidayRequestStateActivity.HolidayRequest>
+                    <InArgument x:TypeArguments="he:HolidayRequestEntity">
+                      <mca:CSharpValue x:TypeArguments="he:HolidayRequestEntity">HolidayRequest</mca:CSharpValue>
+                    </InArgument>
+                  </ha:UpdateHolidayRequestStateActivity.HolidayRequest>
+                  <ha:UpdateHolidayRequestStateActivity.NewState>
+                    <InArgument x:TypeArguments="he:EHolidayRequestState">
+                      <mca:CSharpValue x:TypeArguments="he:EHolidayRequestState">EHolidayRequestState.Refused</mca:CSharpValue>
+                    </InArgument>
+                  </ha:UpdateHolidayRequestStateActivity.NewState>
+                </ha:UpdateHolidayRequestStateActivity>
+                <FlowStep.Next>
+                  <FlowStep x:Name="__ReferenceID4" sap2010:WorkflowViewState.IdRef="FlowStep_4">
+                    <ha:SendEmailActivity Body="Your holiday request has been refused!" sap2010:WorkflowViewState.IdRef="SendEmailActivity_1" Subject="Holiday request">
+                      <ha:SendEmailActivity.ToMailAddress>
+                        <InArgument x:TypeArguments="x:String">
+                          <mca:CSharpValue x:TypeArguments="x:String">HolidayRequest.Originator.EmailAddress</mca:CSharpValue>
+                        </InArgument>
+                      </ha:SendEmailActivity.ToMailAddress>
+                    </ha:SendEmailActivity>
+                  </FlowStep>
+                </FlowStep.Next>
+              </FlowStep>
+            </FlowDecision.True>
+            <FlowDecision.False>
+              <FlowStep x:Name="__ReferenceID2" sap2010:WorkflowViewState.IdRef="FlowStep_3">
+                <ha:UpdateHolidayRequestStateActivity sap2010:WorkflowViewState.IdRef="UpdateHolidayRequestStateActivity_2">
+                  <ha:UpdateHolidayRequestStateActivity.HolidayRequest>
+                    <InArgument x:TypeArguments="he:HolidayRequestEntity">
+                      <mca:CSharpValue x:TypeArguments="he:HolidayRequestEntity">HolidayRequest</mca:CSharpValue>
+                    </InArgument>
+                  </ha:UpdateHolidayRequestStateActivity.HolidayRequest>
+                  <ha:UpdateHolidayRequestStateActivity.NewState>
+                    <InArgument x:TypeArguments="he:EHolidayRequestState">
+                      <mca:CSharpValue x:TypeArguments="he:EHolidayRequestState">EHolidayRequestState.Approved</mca:CSharpValue>
+                    </InArgument>
+                  </ha:UpdateHolidayRequestStateActivity.NewState>
+                </ha:UpdateHolidayRequestStateActivity>
+                <FlowStep.Next>
+                  <FlowStep x:Name="__ReferenceID5" sap2010:WorkflowViewState.IdRef="FlowStep_5">
+                    <ha:SendEmailActivity Body="Your holiday request has been approved!" sap2010:WorkflowViewState.IdRef="SendEmailActivity_2" Subject="Holiday request">
+                      <ha:SendEmailActivity.ToMailAddress>
+                        <InArgument x:TypeArguments="x:String">
+                          <mca:CSharpValue x:TypeArguments="x:String">HolidayRequest.Originator.EmailAddress</mca:CSharpValue>
+                        </InArgument>
+                      </ha:SendEmailActivity.ToMailAddress>
+                    </ha:SendEmailActivity>
+                    <FlowStep.Next>
+                      <FlowStep x:Name="__ReferenceID6" sap2010:WorkflowViewState.IdRef="FlowStep_7">
+                        <ha:BookHolidayRequestActivity sap2010:WorkflowViewState.IdRef="BookHolidayRequestActivity_1">
+                          <ha:BookHolidayRequestActivity.HolidayRequest>
+                            <InArgument x:TypeArguments="he:HolidayRequestEntity">
+                              <mca:CSharpValue x:TypeArguments="he:HolidayRequestEntity">HolidayRequest</mca:CSharpValue>
+                            </InArgument>
+                          </ha:BookHolidayRequestActivity.HolidayRequest>
+                        </ha:BookHolidayRequestActivity>
+                        <FlowStep.Next>
+                          <FlowStep x:Name="__ReferenceID7" sap2010:WorkflowViewState.IdRef="FlowStep_6">
+                            <ha:UpdateHolidayRequestStateActivity sap2010:WorkflowViewState.IdRef="UpdateHolidayRequestStateActivity_3">
+                              <ha:UpdateHolidayRequestStateActivity.HolidayRequest>
+                                <InArgument x:TypeArguments="he:HolidayRequestEntity">
+                                  <mca:CSharpValue x:TypeArguments="he:HolidayRequestEntity">HolidayRequest</mca:CSharpValue>
+                                </InArgument>
+                              </ha:UpdateHolidayRequestStateActivity.HolidayRequest>
+                              <ha:UpdateHolidayRequestStateActivity.NewState>
+                                <InArgument x:TypeArguments="he:EHolidayRequestState">
+                                  <mca:CSharpValue x:TypeArguments="he:EHolidayRequestState">EHolidayRequestState.Approved</mca:CSharpValue>
+                                </InArgument>
+                              </ha:UpdateHolidayRequestStateActivity.NewState>
+                            </ha:UpdateHolidayRequestStateActivity>
+                          </FlowStep>
+                        </FlowStep.Next>
+                      </FlowStep>
+                    </FlowStep.Next>
+                  </FlowStep>
+                </FlowStep.Next>
+              </FlowStep>
+            </FlowDecision.False>
+          </FlowDecision>
+        </FlowStep.Next>
+      </FlowStep>
+    </Flowchart.StartNode>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+    <x:Reference>__ReferenceID3</x:Reference>
+    <x:Reference>__ReferenceID4</x:Reference>
+    <x:Reference>__ReferenceID5</x:Reference>
+    <x:Reference>__ReferenceID6</x:Reference>
+    <x:Reference>__ReferenceID7</x:Reference>
+    <sads:DebugSymbol.Symbol>d2NDOlxVc2Vyc1xNYXJpdXNcU291cmNlXFJlcG9zXFR4Rmxvd1xUeEZsb3dcSG9saWRheUFwcHJvdmFsV0ZDb25zb2xlQXBwXEhvbGlkYXlBcHByb3ZhbFdvcmtmbG93LnhhbWwZLwOlAQ8CAQE2CUEwAgE0RQ9FYwIBMGQRbzgCASdyFXgsAgEgexmBATkCARuEAR2PAUQCARJJEVQ4AgEJVxVdLAIBAjaFATaTAQIBPTkPOWoCATk+Dz5qAgE1ZxdncgIBLGwXbIEBAgEocjByWQIBJnKYAXKpAQIBJXUbdX8CASF+H356AgEchwEjhwF+AgEXjAEjjAGNAQIBE0wXTHICAQ5RF1GAAQIBClcwV1gCAQhXlwFXqAECAQdaG1p/AgED</sads:DebugSymbol.Symbol>
+  </Flowchart>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="CreateHolidayApprovalTaskActivity_1" sap:VirtualizedContainerService.HintSize="200,22">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UpdateHolidayRequestStateActivity_1" sap:VirtualizedContainerService.HintSize="200,22">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SendEmailActivity_1" sap:VirtualizedContainerService.HintSize="200,22">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">0,279</av:Point>
+            <av:Size x:Key="ShapeSize">200,22</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_2">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">0,179</av:Point>
+            <av:Size x:Key="ShapeSize">200,22</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">100,201 100,279</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UpdateHolidayRequestStateActivity_2" sap:VirtualizedContainerService.HintSize="200,22">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SendEmailActivity_2" sap:VirtualizedContainerService.HintSize="200,22">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="BookHolidayRequestActivity_1" sap:VirtualizedContainerService.HintSize="200,22">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UpdateHolidayRequestStateActivity_3" sap:VirtualizedContainerService.HintSize="200,22">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_6">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">460,289</av:Point>
+            <av:Size x:Key="ShapeSize">200,22</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">490,241 490,259</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_7">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">670,259</av:Point>
+            <av:Size x:Key="ShapeSize">200,22</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">770,281 770,300 660,300</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_5">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">460,229</av:Point>
+            <av:Size x:Key="ShapeSize">200,22</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">660,240 770,240 770,259</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_3">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">460,179</av:Point>
+            <av:Size x:Key="ShapeSize">200,22</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">560,201 560,229</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowDecision_1" sap:VirtualizedContainerService.HintSize="70,87">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">285,146.5</av:Point>
+            <av:Size x:Key="ShapeSize">70,87</av:Size>
+            <x:String x:Key="TrueLabel">[refused]</x:String>
+            <x:String x:Key="FalseLabel">[approved]</x:String>
+            <av:PointCollection x:Key="FalseConnector">355,190 460,190</av:PointCollection>
+            <av:PointCollection x:Key="TrueConnector">285,190 200,190</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_1">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">220,99</av:Point>
+            <av:Size x:Key="ShapeSize">200,22</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">320,121 320,146.5</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Flowchart_1" sap:VirtualizedContainerService.HintSize="884,636">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <av:Point x:Key="ShapeLocation">290,2.5</av:Point>
+            <av:Size x:Key="ShapeSize">60,75</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">320,77.5 320,99</av:PointCollection>
+            <x:Double x:Key="Width">870</x:Double>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="HolidayApprovalWFConsoleApp.HolidayApprovalWorkflow_1" sap:VirtualizedContainerService.HintSize="924,716" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

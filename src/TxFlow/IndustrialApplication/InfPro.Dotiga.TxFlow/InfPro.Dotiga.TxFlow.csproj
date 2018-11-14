@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration>Debug</Configuration>
+    <Platform>AnyCPU</Platform>
+    <RootNamespace>InfPro.Dotiga.TxFlow</RootNamespace>
+    <AssemblyName>InfPro.Dotiga.TxFlow</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <OutputPath>bin\</OutputPath>
+    <ProjectGuid>{3906F3CF-437B-4D4C-85DC-987DC4BDE307}</ProjectGuid>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="InfPro.Dotiga.Activities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>false</SpecificVersion>
+      <HintPath>C:\Users\Marius\Documents\Visual Studio 2017\Projects\InfPro.Dotiga.Activities\InfPro.Dotiga.Activities\bin\Debug\InfPro.Dotiga.Activities.dll</HintPath>
+    </Reference>
+    <Reference Include="InfPro.Dotiga.ValueObjects, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>false</SpecificVersion>
+      <HintPath>C:\Users\Marius\Documents\Visual Studio 2017\Projects\InfPro.Dotiga.Activities\InfPro.Dotiga.Activities\bin\Debug\InfPro.Dotiga.ValueObjects.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ExtendedReflection, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Pex.Framework, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <SpecificVersion>false</SpecificVersion>
+      <HintPath>C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Activities" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="TxFlow.CSharpDSL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>false</SpecificVersion>
+      <HintPath>C:\TxFlow\TxFlow.CSharpDSL.Generator\TxFlow.CSharpDSL.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="InfProDotigaActivityToolbox.generated.cs" />
+    <Compile Include="InfProDotigaActivityToolboxLogger.generated.cs" />
+    <Compile Include="PexInfProDotigaActivityToolbox.generated.cs" />
+    <Compile Include="RequestProofOfDeliveryWF.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\Marius\Documents\Visual Studio 2017\Projects\InfPro.Dotiga.Activities\InfPro.Dotiga.TxFlow\launchDebug.json" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>C:\TxFlow\TxFlow.CSharpDSL.Transpiler\TxFlow.CSharpDSL.Transpiler.exe "$(ProjectPath)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

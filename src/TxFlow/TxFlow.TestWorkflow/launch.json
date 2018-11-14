@@ -1,0 +1,7 @@
+﻿{
+	"$adapter": "C:\\Users\\Marius\\Source\\Repos\\TxFlow\\TxFlow\\TxFlow.Debug.Adapter\\bin\\Debug\\TxFlow.Debug.Adapter.exe",
+	"name": "Attach TxFlow",
+	"type": "TxFlow",
+	"request": "attach",
+	"address": "http://localhost:8071",
+}
