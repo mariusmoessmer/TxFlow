@@ -50,9 +50,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="TxFlow.CSharpDSL">
-      <HintPath>..\..\..\..\..\..\..\..\TxFlow\TxFlow.CSharpDSL.Transpiler\TxFlow.CSharpDSL.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RequestProofOfDeliveryWFTests.cs" />
@@ -64,6 +61,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TxFlow.CSharpDSL\TxFlow.CSharpDSL.csproj">
+      <Project>{00b38b31-7725-48b1-a46e-af8233092e96}</Project>
+      <Name>TxFlow.CSharpDSL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InfPro.Dotiga.TxFlow\InfPro.Dotiga.TxFlow.csproj">
       <Project>{3906f3cf-437b-4d4c-85dc-987dc4bde307}</Project>
       <Name>InfPro.Dotiga.TxFlow</Name>
